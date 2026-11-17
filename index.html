@@ -92,13 +92,22 @@
   .card h1 .m{color:var(--red);position:relative;display:inline-block}
   .card h1 .m::after{content:"";position:absolute;left:-2%;right:-2%;bottom:.04em;height:.16em;background:var(--gold2);opacity:.75;z-index:-1;transform:scaleX(0);transform-origin:left;transition:transform .7s .5s ease}
   #intro.s-title .card h1 .m::after{transform:scaleX(1)}
-  .card .who{margin-top:16px;font-size:clamp(17px,2.8vw,24px);font-weight:700;color:var(--red);opacity:0;transition:opacity .8s .9s}
+  .card .who{margin-top:16px;display:inline-flex;flex-direction:column;gap:4px;padding:10px 16px;border:1px dashed rgba(139,30,43,.45);border-radius:8px;background:rgba(255,255,255,.55);font-size:clamp(13px,2.2vw,16px);color:var(--ink);text-align:left;opacity:0;transition:opacity .8s .9s}
   #intro.s-title .card .who{opacity:1}
+  .assign{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+  .assign span{flex:0 0 auto;min-width:6.5em;font-size:.78em;letter-spacing:.08em;color:var(--teal);font-weight:700}
+  .assign b{color:var(--red);margin-right:2px}
+  .assign i{font-style:normal;font-size:.82em;color:var(--muted)}
+  .pick{margin-top:16px;font-size:14px;color:var(--muted);opacity:0;transition:opacity .6s 1.5s}
+  #intro.s-title .pick{opacity:1}
+  .enters{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+  .enter.m{background:#6b4f2a;box-shadow:0 10px 24px rgba(107,79,42,.35)}
+  .enter.m:hover{background:#7d5c31}
   .seal{position:absolute;right:-.72em;top:-.3em;width:.78em;height:.78em;display:grid;place-items:center;
     background:#b3202c;color:#fff2e6;font-weight:800;font-size:clamp(46px,9vw,92px);line-height:1;text-align:center;border-radius:6px;box-shadow:inset 0 0 0 3px rgba(255,230,220,.35);
     transform:scale(2.2) rotate(-8deg);opacity:0;transition:transform .35s cubic-bezier(.3,1.6,.5,1) 1.3s,opacity .2s 1.3s}
   #intro.s-title .seal{transform:scale(1) rotate(-8deg);opacity:.92}
-  .enter{pointer-events:auto;margin-top:30px;padding:12px 28px;border:0;border-radius:999px;background:var(--red);color:#fff;font-size:15px;letter-spacing:.08em;cursor:pointer;box-shadow:0 10px 24px rgba(139,30,43,.35);opacity:0;transform:translateY(8px);transition:opacity .6s 1.7s,transform .6s 1.7s,background .2s}
+  .enter{pointer-events:auto;margin-top:12px;padding:12px 28px;border:0;border-radius:999px;background:var(--red);color:#fff;font-size:15px;letter-spacing:.08em;cursor:pointer;box-shadow:0 10px 24px rgba(139,30,43,.35);opacity:0;transform:translateY(8px);transition:opacity .6s 1.7s,transform .6s 1.7s,background .2s}
   #intro.s-title .enter{opacity:1;transform:none}
   .enter:hover{background:var(--red2)}
   .skip{position:absolute;z-index:8;right:16px;bottom:16px;padding:6px 12px;border:1px solid rgba(255,255,255,.4);border-radius:999px;background:rgba(0,0,0,.18);color:rgba(255,255,255,.85);font-size:12px;cursor:pointer;backdrop-filter:blur(4px)}
@@ -305,7 +314,7 @@
     .grid{gap:4px}
     .pl{min-height:56px}
     .ladder{grid-template-columns:repeat(6,1fr);row-gap:30px}
-    .st{min-height:calc(50px + var(--j,0) * 6px)}
+    .st{min-height:58px}
     .detail{flex-direction:column;align-items:center;text-align:center}
     .detail .dp{flex-basis:auto;width:160px}
     .detail .rel{justify-content:center}
@@ -326,26 +335,33 @@
   <div class="rays"></div>
   <canvas id="wcv"></canvas>
 
-  <div class="i-head">花嶺國 · 宮中錄</div>
+  <div class="i-head">花嶺國 · 雙生憑依</div>
   <div class="i-start">
-    <div class="l1">초여름 일요일, 도시 외곽의 호숫가.</div>
-    <div class="l2">마지막 남은 <em>계란말이</em> 하나.</div>
+    <div class="l1">초여름 일요일, 도시 외곽의 호숫가. 스물두 살 쌍둥이.</div>
+    <div class="l2">마지막 한 점을 두고, <em>또</em> 붙었다.</div>
     <div class="hint"><span class="dot"></span><span>수면을 눌러 주세요</span></div>
   </div>
 
   <div class="i-say">
     <p class="splash" id="t0">첨벙.</p>
-    <p class="nar" id="t1">물은 생각보다 차갑고,<br>생각보다 깊었다.</p>
-    <p class="nar" id="t2">손목을 쥔 동생의 손아귀가<br>끝까지 풀리지 않았다는 것.</p>
-    <p class="cold" id="t3">그리고, 또 차가운 물.</p>
+    <p class="nar" id="t1">낡은 데크가 꺼지고, 둘이 같이 빠졌다.<br>물은 생각보다 차갑고, 생각보다 깊었다.</p>
+    <p class="nar" id="t2">서로를 붙잡은 손이<br>끝까지 풀리지 않았다는 것.</p>
+    <p class="cold" id="t3">그리고 눈을 떴는데.</p>
   </div>
 
   <div class="sheet">
     <div class="card">
-      <div class="k">花嶺國 · 洗踏房</div>
-      <h1>빙의를 했는데<br><span class="m">뭔가 잘못됐습니다</span>?!<span class="seal"><span style="font-size:.26em;line-height:1.05">花<br>嶺</span></span></h1>
-      <div class="who">"누구의 것이냐."</div>
-      <button class="enter" id="enter">궐 안으로 들어가기</button>
+      <div class="k">花嶺國 · 雙生憑依</div>
+      <h1>빙의를 했는데<br><span class="m">뭔가 잘못됐습니다</span>?!<span class="seal"><span style="font-size:.26em;line-height:1.05">誤<br>配</span></span></h1>
+      <div class="who">
+        <div class="assign"><span>빙의 배정 결과</span><b>나</b> 세답방 일꾼 <i>(궁에서 제일 낮음)</i></div>
+        <div class="assign"><span>&nbsp;</span><b>동생</b> 영안대군 <i>(궁에서 제일 망나니)</i></div>
+      </div>
+      <div class="pick">어느 쪽으로 입궐하시겠습니까?</div>
+      <div class="enters">
+        <button class="enter" data-g="f">여자로 · 무수리</button>
+        <button class="enter m" data-g="m">남자로 · 물지게꾼</button>
+      </div>
     </div>
   </div>
 
@@ -435,9 +451,10 @@
 
   <!-- 첫 장면 -->
   <section id="scene">
-    <div class="h rv"><div class="k">第一話</div><h2>홑청이 날아간 날</h2><p>이야기는 화령 칠년 정월, 세답방 빨래통 앞에서 시작한다.</p><span class="orn"></span></div>
-    <div class="scene rv">
-      <div class="when">화령 칠년 정월 스무하루 · 사시 · 세답방</div>
+    <div class="h rv"><div class="k">第一話</div><h2>같이 빠졌는데, 따로 깨어났다</h2><p>이야기는 화령 칠년 정월, 세답방에서 시작한다. 여자와 남자는 첫 장면이 다르다.</p><span class="orn"></span></div>
+    <div class="map-tabs rv" id="sceneTabs"><button class="on" data-s="f">여자 · 홑청이 날아간 날</button><button class="outside" data-s="m">남자 · 물벼락은 왕을 고르지 않는다</button></div>
+    <div class="scene rv" id="scene-f">
+      <div class="when">화령 칠년 정월 스무하루 · 사시 · 세답방 빨래통 앞</div>
       <p class="n">손목까지 잠긴 건 얼음이 살짝 낀 커다란 나무 빨래통이었고, 손에 쥐어진 건 동생의 손목이 아니라 빨래 방망이였다. 코끝을 찌르는 잿물 냄새. 낮은 기와 담장 위로 하얀 홑청이 줄줄이 펄럭였다.</p>
       <p class="q">"얘! 정신 차려! 또 졸았지?"</p>
       <p class="n">대전. 폭군. 숙수. 귀에 들어오는 단어가 하나같이 사극 대사였다.</p>
@@ -445,6 +462,17 @@
       <p class="n">마당이 얼어붙었다.</p>
       <p class="n">사내가 천천히 홑청을 걷어 냈다. 서늘하게 긴 눈매가 마당을 한 번 훑더니, 빨래통 앞에서 멈췄다.</p>
       <p class="last">"누구의 것이냐."</p>
+      <div class="fade">그다음은, 당신의 대답으로.</div>
+    </div>
+    <div class="scene rv" id="scene-m" hidden>
+      <div class="when">화령 칠년 정월 스무하루 · 사시 · 세답방 우물가</div>
+      <p class="n">입안 가득 들어찬 건 호숫물이 아니라 쇠 맛 나는 우물물이었다. 어깨에는 나무 물지게, 양쪽 물통이 넘칠 듯 출렁였다. 발밑엔 살얼음 낀 돌바닥.</p>
+      <p class="q">"야! 물 안 오고 뭐 해! 그 물 대전 홑청 헹굴 거야, 대전! 폭군 이불이라고!"</p>
+      <p class="n">대전. 폭군. 상궁마마님. 머릿속에서 무언가가 천천히 맞춰지기 시작했다.</p>
+      <p class="n">한 발짝 내딛자마자 언 바닥이 미끄러졌다. 물지게가 크게 기울었고, 앞쪽 물통 하나가 고스란히 허공으로 날았다. 마침 담장 모퉁이를 돌아 들어오던 키 큰 사내가 있었다.</p>
+      <p class="n">촤아악. 마당이 정지했다.</p>
+      <p class="n">사내가 젖은 앞머리를 천천히 쓸어 넘겼다. 길고 서늘한 눈이 빈 물통을 한 번, 물지게를 멘 이쪽을 한 번 보았다.</p>
+      <p class="last">"물이 차구나. …이름이 무엇이냐."</p>
       <div class="fade">그다음은, 당신의 대답으로.</div>
     </div>
   </section>
@@ -613,11 +641,15 @@
   }
   function quick(){ timers.forEach(clearTimeout); running = false; intro.classList.add('done'); document.body.classList.remove('locked'); }
   intro.addEventListener('click', (e) => {
-    if (e.target.closest('#skip') || e.target.closest('#enter')) return;
+    if (e.target.closest('#skip') || e.target.closest('.enter')) return;
     if (!started){ const r = intro.getBoundingClientRect(); play(e.clientX - r.left, e.clientY - r.top); }
-    else if (intro.classList.contains('s-title')) finish();
   });
-  document.getElementById('enter').addEventListener('click', (e) => { e.stopPropagation(); finish(); });
+  document.querySelectorAll('.enter').forEach(b => b.addEventListener('click', (e) => {
+    e.stopPropagation();
+    try{ sessionStorage.setItem('hr_g', b.dataset.g); }catch(err){}
+    window.dispatchEvent(new CustomEvent('hr-gender', { detail: b.dataset.g }));
+    finish();
+  }));
   document.getElementById('skip').addEventListener('click', (e) => { e.stopPropagation(); quick(); try{ sessionStorage.setItem('hr_seen','1'); }catch(err){} });
   document.getElementById('again').addEventListener('click', () => { try{ sessionStorage.removeItem('hr_seen'); }catch(e){} location.href = location.pathname; });
 
@@ -680,6 +712,22 @@ document.querySelectorAll('#ladTabs button').forEach(b => b.addEventListener('cl
   drawLadder(b.dataset.l === 'm' ? MSTEPS : STEPS);
 }));
 
+/* ═══════════ 첫 장면 탭 · 입궐 성별 연동 ═══════════ */
+function setScene(g){
+  document.querySelectorAll('#sceneTabs button').forEach(x => x.classList.toggle('on', x.dataset.s === g));
+  document.getElementById('scene-f').hidden = g !== 'f';
+  document.getElementById('scene-m').hidden = g !== 'm';
+}
+document.querySelectorAll('#sceneTabs button').forEach(b => b.addEventListener('click', () => setScene(b.dataset.s)));
+function applyGender(g){
+  if (g !== 'f' && g !== 'm') return;
+  setScene(g);
+  document.querySelectorAll('#ladTabs button').forEach(x => x.classList.toggle('on', x.dataset.l === g));
+  drawLadder(g === 'm' ? MSTEPS : STEPS);
+}
+window.addEventListener('hr-gender', e => applyGender(e.detail));
+try{ applyGender(sessionStorage.getItem('hr_g')); }catch(e){}
+
 /* ═══════════ 궁궐 지도 ═══════════ */
 const IN = [
   ["냉궁","冷宮",1,1,1,"죄를 입은 후궁이 갇히는 외진 전각. 담이 높고 볕이 들지 않는다.","cold"],
@@ -738,8 +786,8 @@ function drawMap(side){
   pinfo.textContent = side === 'in' ? '전각을 하나 눌러 보세요.' : '궐 밖 장소를 하나 눌러 보세요.';
   mnote.textContent = side === 'in' ? '궐 밖은 허락이 있어야 나갈 수 있다. 몰래 나가면 대가가 따른다.' : '도성의 거리. 들킬 위험과 뜻밖의 만남이 함께 있다.';
 }
-function setSide(s){ document.querySelectorAll('.map-tabs button').forEach(b => b.classList.toggle('on', b.dataset.side === s)); drawMap(s); }
-document.querySelectorAll('.map-tabs button').forEach(b => b.addEventListener('click', () => setSide(b.dataset.side)));
+function setSide(s){ document.querySelectorAll('#palace .map-tabs button').forEach(b => b.classList.toggle('on', b.dataset.side === s)); drawMap(s); }
+document.querySelectorAll('#palace .map-tabs button').forEach(b => b.addEventListener('click', () => setSide(b.dataset.side)));
 drawMap('in');
 
 /* ═══════════ 명령어 ═══════════ */
