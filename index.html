@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>왜 나만 무수리야?!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f7efe1; --paper2:#fbf6ec; --ink:#2a1a14; --muted:#7a6656;
+    --red:#8b1e2b; --gold:#c9a24a; --gold2:#e8c26a; --teal:#1f5e57; --navy:#2b3f73;
+    --night:#0e0b14;
+    --dan:repeating-linear-gradient(90deg,#a3202a 0 14px,#e8c26a 14px 18px,#1f5e57 18px 32px,#e8c26a 32px 36px,#2b3f73 36px 50px,#e8c26a 50px 54px);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:60px}
+  html,body{margin:0}
+  body{background:var(--paper);color:var(--ink);font-family:'Nanum Myeongjo',serif;line-height:1.7;word-break:keep-all}
+  body.locked{overflow:hidden}
+  button{font-family:inherit}
+
+  /* ═════════ 궐문 인트로 ═════════ */
+  #gate{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px 16px;overflow:hidden;
+    background:radial-gradient(ellipse at 50% 18%,#2a1d33 0%,#14101c 45%,var(--night) 100%);color:#f3e6cc;transition:opacity 1s ease}
+  #gate.gone{opacity:0;pointer-events:none}
+  .moon{position:absolute;top:3%;right:6%;width:46px;height:46px;border-radius:50%;background:radial-gradient(circle at 40% 40%,#fff8e4,#e9d6a6 70%);box-shadow:0 0 50px 12px rgba(255,236,180,.22)}
+  .petal{position:absolute;top:-20px;width:10px;height:10px;border-radius:70% 0 70% 0;background:#f2a7b5;opacity:.75;animation:fall linear infinite}
+  @keyframes fall{to{transform:translate(-60px,110vh) rotate(540deg)}}
+  .g-top{text-align:center;position:relative;z-index:2}
+  .g-top .k{font-size:12px;letter-spacing:.5em;color:var(--gold2)}
+  .g-top h1{margin:6px 0 0;font-size:clamp(26px,6vw,40px);font-weight:800;color:#fff4dc;letter-spacing:.04em;text-shadow:0 2px 16px rgba(194,54,74,.5)}
+  .g-top h1 em{font-style:normal;color:var(--gold2)}
+
+  .gate{position:relative;width:min(84vw,420px,48vh);z-index:2}
+  .roof{position:relative;height:clamp(44px,11vw,64px);margin:0 -9%;border-radius:50% 50% 6px 6px/60% 60% 6px 6px;
+    background:repeating-linear-gradient(90deg,#2b2a33 0 10px,#3a3944 10px 12px),#2b2a33;box-shadow:0 6px 0 #1b1a22}
+  .roof::after{content:"";position:absolute;left:4%;right:4%;bottom:-14px;height:12px;background:var(--dan)}
+  .lintel{height:22px;margin-top:14px;background:#5b1a20;border-bottom:3px solid #3b0f14}
+  .plaque{position:absolute;left:50%;top:clamp(48px,12vw,68px);transform:translateX(-50%);z-index:3;padding:4px 14px;background:#1d2b55;border:3px solid var(--gold);color:var(--gold2);font-weight:800;font-size:clamp(14px,3.6vw,18px);letter-spacing:.35em;box-shadow:0 3px 10px rgba(0,0,0,.5)}
+  .frame{position:relative;display:flex;gap:0;padding:0 7%;background:linear-gradient(90deg,#7a1820 0 7%,transparent 7% 93%,#7a1820 93%)}
+  .opening{position:relative;flex:1;aspect-ratio:1/1.05;perspective:1100px;background:radial-gradient(ellipse at 50% 60%,#fff3cf 0%,#f3c97a 35%,#6b3b1e 100%);overflow:hidden}
+  .leaf{position:absolute;top:0;bottom:0;width:50%;transition:transform 1.8s cubic-bezier(.6,.05,.25,1);
+    background:radial-gradient(circle,#e8c26a 0 3.5px,#8a6a2a 4px,transparent 5px) 0 0/30px 30px,linear-gradient(90deg,#8e1b22,#a8262e 50%,#8e1b22);
+    border:4px solid #5b1218;box-shadow:inset 0 0 30px rgba(0,0,0,.45)}
+  .leaf.l{left:0;transform-origin:left center}
+  .leaf.r{right:0;transform-origin:right center}
+  .ring{position:absolute;top:52%;width:26px;height:26px;border-radius:50%;border:4px solid var(--gold);box-shadow:0 2px 4px rgba(0,0,0,.5)}
+  .leaf.l .ring{right:10px}.leaf.r .ring{left:10px}
+  .ring::before{content:"";position:absolute;left:50%;top:-12px;width:10px;height:10px;transform:translateX(-50%);border-radius:50%;background:var(--gold)}
+  #gate.open .leaf.l{transform:rotateY(-105deg)}
+  #gate.open .leaf.r{transform:rotateY(105deg)}
+  .steps{height:16px;margin:0 -4%;background:linear-gradient(#8f8676,#6e6658);border-radius:2px}
+  .steps+.steps{margin:0 -9%;height:14px;background:linear-gradient(#7b7364,#5b5448)}
+  .lamp{position:absolute;top:34%;width:22px;height:34px;border-radius:8px;background:radial-gradient(#ffd98a,#d0602e);box-shadow:0 0 26px 8px rgba(255,170,80,.45);animation:sway 3s ease-in-out infinite;transform-origin:top center}
+  .lamp::before{content:"";position:absolute;left:50%;top:-16px;width:2px;height:16px;background:#5a4a3a}
+  .lamp.l{left:-10%}.lamp.r{right:-10%}
+  @keyframes sway{50%{transform:rotate(4deg)}}
+
+  .pass{position:relative;z-index:2;display:flex;align-items:center;gap:14px;padding:12px 18px 12px 14px;border:0;border-radius:12px 12px 8px 8px;cursor:pointer;color:#3a2210;
+    background:linear-gradient(160deg,#d9b27a,#b98a4e 60%,#a27740);box-shadow:0 8px 24px rgba(0,0,0,.5),inset 0 0 0 2px rgba(80,40,10,.35);transition:transform .35s ease,opacity .6s ease;animation:bob 2.4s ease-in-out infinite}
+  .pass:hover{transform:translateY(-4px) rotate(-1deg)}
+  .pass .hole{width:12px;height:12px;border-radius:50%;background:#2a1a10;box-shadow:inset 0 1px 2px #000}
+  .pass .t{font-size:22px;font-weight:800;letter-spacing:.25em;writing-mode:vertical-rl;line-height:1}
+  .pass .d{text-align:left;font-size:13px;line-height:1.5}
+  .pass .d b{display:block;font-size:15px}
+  .pass.used{animation:none;transform:translateY(-140px) scale(.5);opacity:0}
+  @keyframes bob{50%{transform:translateY(-5px)}}
+  .g-msg{position:relative;z-index:2;min-height:24px;font-size:14px;color:#e8d8b8;text-align:center}
+  .g-msg.ok{color:var(--gold2);font-weight:700}
+  .skip{position:absolute;right:16px;bottom:14px;z-index:3;background:none;border:0;color:rgba(243,230,204,.55);font-size:12px;cursor:pointer;text-decoration:underline}
+  .cloth{position:absolute;z-index:5;left:-30%;top:70%;width:140px;height:90px;background:linear-gradient(135deg,#fff,#eef2f4);border-radius:6px 40px 8px 30px;box-shadow:0 6px 20px rgba(0,0,0,.25);opacity:0}
+  #gate.open .cloth{animation:fly 2.2s .5s ease-in forwards}
+  @keyframes fly{0%{opacity:1;transform:translate(0,0) rotate(-20deg) skewX(10deg)}50%{transform:translate(70vw,-40vh) rotate(25deg) skewX(-12deg)}100%{opacity:1;transform:translate(150vw,-80vh) rotate(60deg) skewX(8deg)}}
+
+  /* ═════════ 본 페이지 ═════════ */
+  .band{height:8px;background:var(--dan)}
+  nav{position:sticky;top:0;z-index:20;background:rgba(247,239,225,.94);backdrop-filter:blur(6px);border-bottom:1px solid rgba(139,30,43,.18)}
+  nav .in{max-width:1080px;margin:0 auto;display:flex;align-items:center;gap:4px;padding:8px 16px;overflow-x:auto;scrollbar-width:none}
+  nav .in::-webkit-scrollbar{display:none}
+  nav a{flex:0 0 auto;padding:5px 10px;font-size:13.5px;color:var(--ink);text-decoration:none;border-radius:999px}
+  nav a:hover{background:rgba(139,30,43,.08);color:var(--red)}
+  nav .out{margin-left:auto;flex:0 0 auto;padding:5px 12px;border:1px solid var(--red);border-radius:999px;background:none;color:var(--red);font-size:12.5px;cursor:pointer}
+  nav .out:hover{background:var(--red);color:#fff}
+  main{max-width:1080px;margin:0 auto;padding:0 16px}
+  section{padding:64px 0 8px}
+  .h{text-align:center;margin-bottom:26px}
+  .h .k{font-size:12px;letter-spacing:.4em;color:var(--gold)}
+  .h h2{margin:2px 0 0;font-size:clamp(22px,4.4vw,30px);color:var(--red);letter-spacing:.05em}
+  .h p{margin:6px auto 0;max-width:560px;font-size:14px;color:var(--muted)}
+
+  /* 작품 소개 */
+  .hero{display:grid;grid-template-columns:minmax(0,420px) 1fr;gap:36px;align-items:center;padding-top:40px}
+  .hero img{width:100%;display:block;filter:drop-shadow(0 12px 28px rgba(60,20,10,.28))}
+  .hero .k{font-size:12px;letter-spacing:.45em;color:var(--gold)}
+  .hero h1{margin:4px 0 6px;font-size:clamp(30px,5.6vw,48px);font-weight:800;color:var(--red);line-height:1.25}
+  .hero .tl{font-size:clamp(15px,2vw,18px);color:var(--muted);margin-bottom:18px}
+  .story p{margin:0 0 12px;font-size:15.5px}
+  .story b{color:var(--red)}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+  .tags span{font-size:12.5px;padding:2px 10px;border-radius:999px;border:1px solid rgba(139,30,43,.35);color:var(--red);background:rgba(255,255,255,.5)}
+  .tags span.adult{background:var(--red);color:#fff;border-color:var(--red)}
+
+  /* 궁궐 안내 */
+  .map-tabs{display:flex;justify-content:center;gap:6px;margin-bottom:12px}
+  .map-tabs button{padding:6px 18px;border-radius:999px;border:1px solid var(--teal);background:none;color:var(--teal);font-size:14px;cursor:pointer}
+  .map-tabs button.on{background:var(--teal);color:#fff}
+  .map-tabs button.outside.on{background:#6b4f2a;border-color:#6b4f2a}
+  .map-tabs button.outside{border-color:#6b4f2a;color:#6b4f2a}
+  .mapbox{max-width:760px;margin:0 auto;padding:10px;border:4px double #8b6b4a;border-radius:12px;background:rgba(139,107,74,.07)}
+  .grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+  .pl .nm{overflow-wrap:anywhere}
+  .pl{min-height:62px;padding:6px 4px;border-radius:8px;border:1px solid rgba(139,107,74,.45);background:rgba(255,255,255,.78);cursor:pointer;text-align:center;transition:transform .15s,background .15s;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .pl:hover{transform:translateY(-2px);border-color:var(--gold)}
+  .pl .hj{font-size:10.5px;color:var(--muted);letter-spacing:.1em}
+  .pl .nm{font-size:clamp(11.5px,2.4vw,14px);font-weight:700;line-height:1.3}
+  .pl.cold{background:rgba(70,80,100,.18)}
+  .pl.soft{background:rgba(31,94,87,.15)}
+  .pl.start{background:rgba(194,54,74,.14);border-color:#c2364a}
+  .pl.gt{background:rgba(31,94,87,.12)}
+  .pl.on{background:var(--red);color:#fff;border-color:var(--red)}
+  .pl.on .hj{color:#f6d9b0}
+  .place-info{max-width:760px;margin:12px auto 0;min-height:52px;padding:10px 14px;border-left:4px solid var(--gold);background:var(--paper2);border-radius:0 8px 8px 0;font-size:14.5px}
+  .place-info b{color:var(--red)}
+  .map-note{text-align:center;font-size:12px;color:var(--muted);margin-top:8px}
+
+  /* 첫 장면 */
+  .scene{max-width:720px;margin:0 auto;padding:30px clamp(18px,5vw,48px);background:var(--paper2);border:1px solid rgba(201,162,74,.6);border-radius:4px;box-shadow:0 8px 30px rgba(60,20,10,.1);position:relative}
+  .scene::before,.scene::after{content:"";position:absolute;left:0;right:0;height:6px;background:var(--dan)}
+  .scene::before{top:0}.scene::after{bottom:0}
+  .scene .when{text-align:center;font-size:13px;color:var(--teal);letter-spacing:.15em;margin-bottom:18px}
+  .scene p{margin:0 0 14px;font-size:15.5px}
+  .scene p.n{color:#4a3a30;font-style:italic}
+  .scene p.q{padding-left:12px;border-left:2px solid rgba(139,30,43,.4)}
+  .scene p.last{text-align:center;font-size:20px;font-weight:800;color:var(--red);margin-top:22px}
+  .scene .fade{text-align:center;color:var(--muted);font-size:13px;margin-top:6px}
+
+  /* 인물 */
+  .cast{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+  .cc{text-align:center}
+  .cc .p{aspect-ratio:3/4;border-radius:10px;overflow:hidden;border:2px solid #c9b199;box-shadow:0 4px 12px rgba(60,20,10,.12);background:var(--paper2)}
+  .cc img{width:100%;height:100%;object-fit:cover;object-position:50% 18%}
+  .cc .r{margin-top:6px;font-size:12px;color:var(--teal);font-weight:700}
+  .cc .n{font-size:15px;font-weight:800;color:var(--red);line-height:1.3}
+  .cc.king .p{border:3px solid var(--gold)}
+  .cc.you .p{display:flex;align-items:center;justify-content:center;border:2px dashed var(--red);background:repeating-linear-gradient(45deg,#f6ead6 0 8px,#efe1c9 8px 16px)}
+  .cc.you .p b{font-size:54px;color:rgba(139,30,43,.5)}
+  .more{display:block;width:max-content;margin:26px auto 0;padding:11px 26px;border-radius:999px;background:var(--red);color:#fff;text-decoration:none;font-size:15px;box-shadow:0 6px 16px rgba(139,30,43,.3)}
+  .more:hover{background:#a3202a}
+  .you-note{text-align:center;font-size:13px;color:var(--muted);margin-top:12px}
+
+  /* 진봉 */
+  .ladder{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;max-width:860px;margin:0 auto}
+  .st{position:relative;padding:8px 12px;border-radius:8px;background:#fff;border:1px solid rgba(139,30,43,.25);font-size:14px;font-weight:700}
+  .st .g{display:block;font-size:10.5px;font-weight:400;color:var(--muted)}
+  .st.now{background:var(--red);color:#fff}.st.now .g{color:#f6d9b0}
+  .st.top{background:linear-gradient(135deg,#e8c26a,#c9a24a);border-color:#b08a30;color:#4a2a0a}
+  .st+.st::before{content:"›";position:absolute;left:-7px;top:50%;transform:translateY(-50%);color:var(--gold);font-size:14px}
+  .rules{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:860px;margin:22px auto 0}
+  .rule{padding:14px 16px;background:var(--paper2);border-radius:10px;border-top:3px solid var(--gold);font-size:14px}
+  .rule b{display:block;color:var(--red);font-size:15.5px;margin-bottom:4px}
+
+  /* 살아가기 */
+  .life{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .lf{padding:18px 16px;background:var(--paper2);border-radius:12px;border:1px solid rgba(139,30,43,.15)}
+  .lf .i{font-size:22px;color:var(--gold);font-weight:800}
+  .lf b{display:block;color:var(--red);font-size:16px;margin:2px 0 6px}
+  .lf p{margin:0;font-size:14px}
+
+  /* 명령어 */
+  .cmds{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:760px;margin:0 auto}
+  .cmd{padding:7px 14px;border-radius:8px;border:1px solid var(--teal);background:#fff;color:var(--teal);font-size:14.5px;cursor:pointer}
+  .cmd:hover{background:rgba(31,94,87,.08)}
+  .cmd.on{background:var(--teal);color:#fff}
+  .cmd-info{max-width:760px;margin:14px auto 0;min-height:48px;padding:10px 14px;text-align:center;font-size:14.5px;background:var(--paper2);border-radius:8px}
+  .cmd-info b{color:var(--teal)}
+
+  .end{text-align:center;padding:70px 16px 30px}
+  .end .big{font-size:clamp(20px,4vw,28px);font-weight:800;color:var(--red);line-height:1.5}
+  .end .sm{margin-top:10px;font-size:13px;color:var(--muted)}
+  footer{text-align:center;font-size:12px;color:var(--muted);padding:20px 16px 34px}
+
+  @media (max-width:760px){
+    .hero{grid-template-columns:1fr;gap:20px;text-align:center}
+    .hero img{max-width:340px;margin:0 auto}
+    .tags{justify-content:center}
+    .story{text-align:left}
+    .cast{grid-template-columns:repeat(3,1fr);gap:10px}
+    .rules{grid-template-columns:1fr}
+    .life{grid-template-columns:1fr 1fr}
+    .grid{gap:4px}
+    .pl{min-height:54px}
+  }
+  @media (max-width:420px){ .life{grid-template-columns:1fr} }
+  @media (prefers-reduced-motion:reduce){ .petal,.lamp,.pass{animation:none} .leaf{transition-duration:.3s} }
+</style>
+</head>
+<body class="locked">
+
+<!-- ═════════ 궐문 인트로 ═════════ -->
+<div id="gate" role="dialog" aria-label="입궐">
+  <div class="moon"></div>
+  <div id="petals"></div>
+  <div class="g-top">
+    <div class="k">花嶺國 · 大闕</div>
+    <h1>왜 나만 <em>무수리</em>야?!</h1>
+  </div>
+  <div class="gate">
+    <div class="roof"></div>
+    <div class="plaque">華嶺門</div>
+    <div class="lintel"></div>
+    <div class="frame">
+      <span class="lamp l"></span><span class="lamp r"></span>
+      <div class="opening">
+        <div class="leaf l"><span class="ring"></span></div>
+        <div class="leaf r"><span class="ring"></span></div>
+      </div>
+    </div>
+    <div class="steps"></div>
+    <div class="steps"></div>
+  </div>
+  <button class="pass" id="pass" aria-label="출입패를 수문장에게 내밀기">
+    <span class="hole"></span>
+    <span class="t">出入</span>
+    <span class="d"><b>세답방 무수리</b>화령 칠년 · 궐내 출입패</span>
+  </button>
+  <div class="g-msg" id="gmsg">출입패를 눌러 수문장에게 내밀어 주세요</div>
+  <button class="skip" id="skip">건너뛰기</button>
+  <div class="cloth"></div>
+</div>
+
+<!-- ═════════ 본 페이지 ═════════ -->
+<div class="band"></div>
+<nav>
+  <div class="in">
+    <a href="#about">작품 소개</a>
+    <a href="#palace">궁궐 안내</a>
+    <a href="#scene">첫 장면</a>
+    <a href="#cast">인물</a>
+    <a href="#jinbong">진봉</a>
+    <a href="#life">궁에서 살아가기</a>
+    <a href="#cmd">명령어</a>
+    <a href="gagye.html">왕실 가계도</a>
+    <button class="out" id="out">궐 밖으로 나가기</button>
+  </div>
+</nav>
+
+<main>
+  <!-- 작품 소개 -->
+  <section id="about" class="hero">
+    <img src="img/teaser.gif" alt="금상 홍윤 티저">
+    <div>
+      <div class="k">花嶺國 · 宮中 ROMANCE</div>
+      <h1>왜 나만 무수리야?!</h1>
+      <div class="tl">폭군은 무수리만 본다</div>
+      <div class="story">
+        <p>호숫가에서 쌍둥이 동생과 투닥거리다 물에 빠졌다. 눈을 떠 보니 화령국 대궐 세답방의 <b>무수리</b>였다.</p>
+        <p>이 나라의 왕은 폭군이다. 외척을 숙청하고, 상소를 불태우고, 후궁 다섯을 두고도 누구의 처소에도 들지 않은 사내.</p>
+        <p>그런 왕이, 빨래 방망이를 든 나를 처음 본 날부터 다른 누구도 보지 않는다.</p>
+        <p>무수리에서 중전까지. 총애로 오를 것인가, 덕망으로 오를 것인가. 그리고 궁에서 제일가는 망나니 대군은 어째서 현대 말버릇을 쓰는 걸까.</p>
+      </div>
+      <div class="tags"><span>순애 폭군</span><span>궁중 로맨스</span><span>빙의</span><span>내명부 진봉</span><span>궁중 시트콤</span><span class="adult">성인</span></div>
+    </div>
+  </section>
+
+  <!-- 궁궐 안내 -->
+  <section id="palace">
+    <div class="h"><div class="k">宮闕 案內</div><h2>궁궐 안내</h2><p>전각을 누르면 그곳이 어떤 곳인지 볼 수 있다. 붉게 표시된 세답방이 이야기가 시작되는 자리다.</p></div>
+    <div class="map-tabs">
+      <button class="on" data-side="in">궐 안</button>
+      <button class="outside" data-side="out">궐 밖</button>
+    </div>
+    <div class="mapbox"><div class="grid" id="grid"></div></div>
+    <div class="place-info" id="pinfo">전각을 하나 눌러 보세요.</div>
+    <div class="map-note" id="mnote">궐 밖은 허락이 있어야 나갈 수 있다. 몰래 나가면 대가가 따른다.</div>
+  </section>
+
+  <!-- 첫 장면 -->
+  <section id="scene">
+    <div class="h"><div class="k">第一話</div><h2>홑청이 날아간 날</h2><p>이야기는 화령 칠년 정월, 세답방 빨래통 앞에서 시작한다.</p></div>
+    <div class="scene">
+      <div class="when">화령 칠년 정월 스무하루 · 사시 · 세답방</div>
+      <p class="n">손목까지 잠긴 건 얼음이 살짝 낀 커다란 나무 빨래통이었고, 손에 쥐어진 건 동생의 손목이 아니라 빨래 방망이였다. 코끝을 찌르는 잿물 냄새. 낮은 기와 담장 위로 하얀 홑청이 줄줄이 펄럭였다.</p>
+      <p class="q">"얘! 정신 차려! 또 졸았지?"</p>
+      <p class="n">대전. 폭군. 숙수. 귀에 들어오는 단어가 하나같이 사극 대사였다.</p>
+      <p class="n">그때 세찬 바람이 세답방 마당을 훑고 지나갔다. 젖은 홑청 한 장이 훌렁 날아올라, 담장 모퉁이를 돌아 들어오던 키 큰 사내의 얼굴을 정면으로 덮쳤다.</p>
+      <p class="n">마당이 얼어붙었다.</p>
+      <p class="n">사내가 천천히 홑청을 걷어 냈다. 서늘하게 긴 눈매가 마당을 한 번 훑더니, 빨래통 앞에서 멈췄다.</p>
+      <p class="last">"누구의 것이냐."</p>
+      <div class="fade">그다음은, 당신의 대답으로.</div>
+    </div>
+  </section>
+
+  <!-- 인물 -->
+  <section id="cast">
+    <div class="h"><div class="k">人物</div><h2>궁 안의 사람들</h2><p>폭군과 대군들, 대비와 다섯 후궁. 그리고 빨래통 앞의 당신.</p></div>
+    <div class="cast">
+      <div class="cc king"><div class="p"><img src="img/01_hongyun.webp" alt=""></div><div class="r">금상</div><div class="n">홍윤</div></div>
+      <div class="cc"><div class="p"><img src="img/02_hongseo.webp" alt=""></div><div class="r">청하대군</div><div class="n">홍서</div></div>
+      <div class="cc"><div class="p"><img src="img/03_honggang.webp" alt=""></div><div class="r">익양대군</div><div class="n">홍강</div></div>
+      <div class="cc"><div class="p"><img src="img/04_hongyul.webp" alt=""></div><div class="r">영안대군</div><div class="n">홍율</div></div>
+      <div class="cc"><div class="p"><img src="img/05_daebi.webp" alt=""></div><div class="r">대비</div><div class="n">윤씨</div></div>
+      <div class="cc"><div class="p"><img src="img/06_gwiin.webp" alt=""></div><div class="r">귀인 · 연화당</div><div class="n">윤씨</div></div>
+      <div class="cc"><div class="p"><img src="img/07_sugui.webp" alt=""></div><div class="r">숙의 · 취운당</div><div class="n">민씨</div></div>
+      <div class="cc"><div class="p"><img src="img/08_soyong.webp" alt=""></div><div class="r">소용 · 청풍당</div><div class="n">백씨</div></div>
+      <div class="cc"><div class="p"><img src="img/09_sugyong.webp" alt=""></div><div class="r">숙용 · 매화당</div><div class="n">조씨</div></div>
+      <div class="cc"><div class="p"><img src="img/10_sugwon.webp" alt=""></div><div class="r">숙원 · 소요당</div><div class="n">서씨</div></div>
+      <div class="cc"><div class="p"><img src="img/11_jejo.webp" alt=""></div><div class="r">제조상궁</div><div class="n">한씨</div></div>
+      <div class="cc"><div class="p"><img src="img/12_sangseon.webp" alt=""></div><div class="r">상선</div><div class="n">김덕보</div></div>
+      <div class="cc"><div class="p"><img src="img/13_jeomsun.webp" alt=""></div><div class="r">세답방 무수리</div><div class="n">점순</div></div>
+      <div class="cc you"><div class="p"><b>?</b></div><div class="r">세답방 무수리</div><div class="n">당신</div></div>
+    </div>
+    <div class="you-note">'?' 자리는 당신의 자리. 스물두 살, 현대에서 온 무수리.</div>
+    <a class="more" href="gagye.html">왕실 가계도 펼쳐 보기 →</a>
+  </section>
+
+  <!-- 진봉 -->
+  <section id="jinbong">
+    <div class="h"><div class="k">進封</div><h2>무수리에서 중전까지</h2><p>성총과 덕망을 쌓아 진봉 심사를 통과하면 교지가 내려온다.</p></div>
+    <div class="ladder">
+      <span class="st now">무수리<span class="g">시작</span></span>
+      <span class="st">나인<span class="g">궁녀</span></span>
+      <span class="st">승은상궁<span class="g">승은</span></span>
+      <span class="st">숙원<span class="g">종4품</span></span>
+      <span class="st">소원<span class="g">정4품</span></span>
+      <span class="st">숙용<span class="g">종3품</span></span>
+      <span class="st">소용<span class="g">정3품</span></span>
+      <span class="st">숙의<span class="g">종2품</span></span>
+      <span class="st">소의<span class="g">정2품</span></span>
+      <span class="st">귀인<span class="g">종1품</span></span>
+      <span class="st">빈<span class="g">정1품 · 호</span></span>
+      <span class="st top">중전<span class="g">국모</span></span>
+    </div>
+    <div class="rules">
+      <div class="rule"><b>진봉 심사</b>예(禮), 지(智), 심(心) 세 관문. 법도를 묻고, 지혜를 시험하고, 마음을 떠본다.</div>
+      <div class="rule"><b>낙방해도 그대로</b>심사에 떨어져도 품계는 내려가지 않는다. 다음 기회를 기다릴 뿐.</div>
+      <div class="rule"><b>빈과 간택</b>빈에 오르면 호(號)를 받는다. 중전의 자리는 초간택, 재간택, 삼간택을 거쳐야 한다.</div>
+    </div>
+  </section>
+
+  <!-- 궁에서 살아가기 -->
+  <section id="life">
+    <div class="h"><div class="k">宮中生活</div><h2>궁에서 살아가기</h2></div>
+    <div class="life">
+      <div class="lf"><div class="i">壹</div><b>내명부 관리</b><p>처소 궁인 배치, 월봉, 상벌, 연회 주관. 품계가 오를수록 손에 쥐는 권한이 커진다.</p></div>
+      <div class="lf"><div class="i">貳</div><b>궁중 세시 행사</b><p>다화회, 단오, 강무 사냥, 나례, 그리고 간택. 절기마다 궁이 들썩이고, 행사는 기회이자 덫이다.</p></div>
+      <div class="lf"><div class="i">參</div><b>궐 안과 궐 밖</b><p>지도를 눌러 이동한다. 냉궁은 함부로 다가가지 말 것. 허락 없이 궐을 빠져나가면 대가가 따른다.</p></div>
+      <div class="lf"><div class="i">肆</div><b>생애록과 가계도</b><p>오늘의 사건, 관계, 회임과 아기씨까지 기록된다. 왕실 가계도에 내 이름이 오르는 날까지.</p></div>
+    </div>
+  </section>
+
+  <!-- 명령어 -->
+  <section id="cmd">
+    <div class="h"><div class="k">命令語</div><h2>채팅에서 쓰는 명령어</h2><p>슬래시와 함께 입력하면 바로 펼쳐진다. 누르면 설명이 나온다.</p></div>
+    <div class="cmds" id="cmds"></div>
+    <div class="cmd-info" id="cinfo">명령어를 하나 눌러 보세요.</div>
+  </section>
+
+  <div class="end">
+    <div class="big">누구의 손을 잡고, 어디까지 오를지는<br>당신이 정한다.</div>
+    <div class="sm">이 이야기는 실존 국가, 인물, 사건과 관계없는 창작입니다. 성인 이용자 전용 작품입니다.</div>
+  </div>
+</main>
+<div class="band"></div>
+<footer>왜 나만 무수리야?! · 花嶺國</footer>
+
+<script>
+/* ── 궐문 ── */
+const gate = document.getElementById('gate'), pass = document.getElementById('pass'), gmsg = document.getElementById('gmsg');
+const petals = document.getElementById('petals');
+for (let i = 0; i < 14; i++) {
+  const s = document.createElement('span'); s.className = 'petal';
+  s.style.left = (Math.random() * 100) + '%';
+  s.style.animationDuration = (7 + Math.random() * 7) + 's';
+  s.style.animationDelay = (-Math.random() * 10) + 's';
+  s.style.transform = 'scale(' + (0.6 + Math.random() * 0.7) + ')';
+  petals.appendChild(s);
+}
+function enter(){ gate.classList.add('gone'); document.body.classList.remove('locked'); try{ sessionStorage.setItem('hr_in','1'); }catch(e){} }
+let busy = false;
+pass.addEventListener('click', () => {
+  if (busy) return; busy = true;
+  pass.classList.add('used');
+  gmsg.textContent = '…';
+  setTimeout(() => { gmsg.textContent = '확인되었다. 세답방 무수리, 들라.'; gmsg.classList.add('ok'); gate.classList.add('open'); }, 700);
+  setTimeout(enter, 3000);
+});
+document.getElementById('skip').addEventListener('click', enter);
+document.getElementById('out').addEventListener('click', () => {
+  busy = false; pass.classList.remove('used'); gate.classList.remove('open', 'gone');
+  gmsg.textContent = '출입패를 눌러 수문장에게 내밀어 주세요'; gmsg.classList.remove('ok');
+  document.body.classList.add('locked'); window.scrollTo(0, 0);
+  try{ sessionStorage.removeItem('hr_in'); }catch(e){}
+});
+try{ if (sessionStorage.getItem('hr_in') === '1') enter(); }catch(e){}
+
+/* ── 궁궐 지도 ── */
+const IN = [
+  ["냉궁","冷宮",1,1,1,"죄를 입은 후궁이 갇히는 외진 전각. 담이 높고 볕이 들지 않는다.","cold"],
+  ["후원","後苑",2,1,4,"연못과 홍매 숲. 밤이면 금상이 홀로 걷는다.","soft"],
+  ["연화당","蓮花堂",1,2,1,"귀인 윤씨의 처소."],
+  ["취운당","翠雲堂",2,2,1,"숙의 민씨의 처소."],
+  ["중궁전","中宮殿",3,2,1,"왕비의 처소. 이 년째 비어 있다."],
+  ["대비전","大妃殿",4,2,2,"대비의 처소. 아침마다 문안이 든다."],
+  ["청풍당","淸風堂",1,3,1,"소용 백씨의 처소."],
+  ["매화당","梅花堂",2,3,1,"숙용 조씨의 처소. 약 달이는 냄새가 난다."],
+  ["대전","大殿",3,3,1,"금상의 침전."],
+  ["내의원","內醫院",4,3,1,"궁중 의원. 탕약 냄새가 밴 곳."],
+  ["생과방","生果房",5,3,1,"다과와 음료를 만드는 곳."],
+  ["소요당","逍遙堂",1,4,1,"숙원 서씨의 처소."],
+  ["빈 별당","空",2,4,1,"주인을 기다리는 빈 별당. 언젠가 누군가의 처소가 된다."],
+  ["편전","便殿",3,4,1,"금상이 정사를 보는 곳."],
+  ["수라간","水剌間",4,4,1,"수라를 짓는 곳."],
+  ["침방","針房",5,4,1,"바느질하는 궁녀들의 방."],
+  ["세답방","洗踏房",1,5,2,"빨래하는 곳. 무수리들의 일터이자 이야기가 시작되는 자리.","start"],
+  ["궐문","闕門",3,5,1,"궐 밖으로 나가는 문. 수문장이 지킨다.","gt"],
+  ["수방","繡房",4,5,1,"수를 놓는 궁녀들의 방."],
+  ["궁녀처소","宮人",5,5,1,"궁녀와 무수리들이 자는 곳."]
+];
+const OUT = [
+  ["홍매산 산사","紅梅寺",1,1,2,"도성 북쪽 산자락의 절. 왕실 원당이라 궁에서도 발길이 잦다."],
+  ["북촌 사대부가","北村",3,1,2,"명문가 저택이 모인 동네. 대비전 외척의 집도 있다."],
+  ["기방","妓房",5,1,1,"선비와 한량이 드나드는 곳. 소문이 가장 빨리 돈다."],
+  ["저잣거리","市廛",1,2,3,"도성 한복판 시전 거리. 사람과 물건과 소문이 넘친다."],
+  ["비단전","緋緞廛",4,2,1,"비단과 장신구를 파는 가게."],
+  ["약방","藥房",5,2,1,"약재를 파는 곳. 의원 나리가 들르곤 한다."],
+  ["주막","酒幕",1,3,1,"국밥과 탁주. 길손과 소문이 모인다."],
+  ["객주","客主",2,3,1,"상단이 묵는 곳. 숙원 서씨 집안과 거래가 있다."],
+  ["포도청","捕盜廳",3,3,1,"도적을 잡는 관아. 밤이면 순라가 돈다."],
+  ["민가","民家",4,3,2,"백성들이 사는 골목. 아이들 소리가 끊이지 않는다."],
+  ["나루터","津",1,4,2,"강을 건너는 배가 오가는 나루."],
+  ["궐로 돌아가기","還宮",3,4,3,"궐문으로 돌아간다.","gt"]
+];
+const grid = document.getElementById('grid'), pinfo = document.getElementById('pinfo'), mnote = document.getElementById('mnote');
+function drawMap(side){
+  const list = side === 'in' ? IN : OUT;
+  grid.innerHTML = '';
+  list.forEach(([n,h,c,r,w,d,cls]) => {
+    const b = document.createElement('button');
+    b.className = 'pl' + (cls ? ' ' + cls : '');
+    b.style.gridColumn = c + ' / span ' + w; b.style.gridRow = r;
+    b.innerHTML = '<span class="hj">' + h + '</span><span class="nm">' + n + '</span>';
+    b.addEventListener('click', () => {
+      if (n === '궐로 돌아가기') { setSide('in'); return; }
+      grid.querySelectorAll('.pl.on').forEach(x => x.classList.remove('on'));
+      b.classList.add('on');
+      pinfo.innerHTML = '<b>' + n + ' ' + h + '</b> · ' + d;
+      if (n === '궐문') pinfo.innerHTML += ' <a href="#" id="toOut" style="color:#6b4f2a">궐 밖으로 →</a>';
+      const t = document.getElementById('toOut'); if (t) t.onclick = (e) => { e.preventDefault(); setSide('out'); };
+    });
+    grid.appendChild(b);
+  });
+  pinfo.textContent = side === 'in' ? '전각을 하나 눌러 보세요.' : '궐 밖 장소를 하나 눌러 보세요.';
+  mnote.textContent = side === 'in' ? '궐 밖은 허락이 있어야 나갈 수 있다. 몰래 나가면 대가가 따른다.' : '도성의 거리. 들킬 위험과 뜻밖의 만남이 함께 있다.';
+}
+function setSide(s){ document.querySelectorAll('.map-tabs button').forEach(b => b.classList.toggle('on', b.dataset.side === s)); drawMap(s); }
+document.querySelectorAll('.map-tabs button').forEach(b => b.addEventListener('click', () => setSide(b.dataset.side)));
+drawMap('in');
+
+/* ── 명령어 ── */
+const CMD = [
+  ["상태","현재 품계, 수치, 장소, 처소 상황을 정리해 보여 준다."],
+  ["진봉","다음 품계까지 필요한 조건과 부족한 점을 확인한다."],
+  ["내명부","내명부 관리판을 연다. 품계에 따라 할 수 있는 일이 달라진다."],
+  ["처소","내 처소와 궁인들의 근황을 살펴본다."],
+  ["후궁","후궁전 서열과 각 후궁과의 관계를 확인한다."],
+  ["소동","지금 장면에 궁중 시트콤 한 편을 터뜨린다."],
+  ["요약","지금까지의 이야기를 일곱 줄 이내로 정리한다."],
+  ["전하의속마음","금상이 지금 무슨 생각을 하는지 짧은 독백으로 엿본다. 스포일러는 없다."],
+  ["가계도","왕실 가계도를 펼친다. 인물을 누르면 소개가 나온다."],
+  ["지도","궁궐 지도를 펼친다. 가고 싶은 곳을 누르면 그 장소로 이동한다."],
+  ["행사","이번 계절의 궁중 행사 일정을 확인한다."]
+];
+const cmds = document.getElementById('cmds'), cinfo = document.getElementById('cinfo');
+CMD.forEach(([n,d]) => {
+  const b = document.createElement('button'); b.className = 'cmd'; b.textContent = '/' + n;
+  b.addEventListener('click', () => { cmds.querySelectorAll('.on').forEach(x => x.classList.remove('on')); b.classList.add('on'); cinfo.innerHTML = '<b>/' + n + '</b> · ' + d; });
+  cmds.appendChild(b);
+});
+</script>
+</body>
+</html>

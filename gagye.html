@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>왕실 가계도 · 왜 나만 무수리야?!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f7efe1; --paper2:#fbf6ec; --ink:#2a1a14; --muted:#7a6656;
+    --red:#8b1e2b; --red2:#a3202a; --gold:#c9a24a; --gold2:#e8c26a;
+    --teal:#1f5e57; --navy:#2b3f73; --line:#a0745a;
+    --dan:repeating-linear-gradient(90deg,#a3202a 0 14px,#e8c26a 14px 18px,#1f5e57 18px 32px,#e8c26a 32px 36px,#2b3f73 36px 50px,#e8c26a 50px 54px);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--paper);
+    background-image:radial-gradient(rgba(139,30,43,.05) 1px,transparent 1px);
+    background-size:6px 6px;
+    color:var(--ink);
+    font-family:'Nanum Myeongjo',serif;
+    line-height:1.6;
+  }
+  .band{height:10px;background:var(--dan)}
+  .wrap{max-width:1080px;margin:0 auto;padding:28px 16px 48px}
+  .back{display:inline-block;margin-bottom:10px;padding:4px 12px;border:1px solid var(--red);border-radius:999px;color:var(--red);text-decoration:none;font-size:13px}
+  .back:hover{background:var(--red);color:#fff}
+  header{text-align:center;margin-bottom:28px}
+  header .seal{display:inline-block;font-size:13px;letter-spacing:.3em;color:var(--red);border:1px solid var(--red);padding:2px 10px;margin-bottom:10px}
+  header h1{margin:0;font-size:clamp(26px,5vw,40px);font-weight:800;color:var(--red);letter-spacing:.04em}
+  header h1 small{display:block;font-size:.45em;color:var(--muted);font-weight:700;letter-spacing:.3em;margin-top:4px}
+  header p{margin:10px auto 0;max-width:560px;font-size:14px;color:var(--muted)}
+
+  /* ── 트리 ── */
+  .tree{position:relative;padding:8px 0 4px}
+  #wires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+  #wires path{fill:none;stroke:var(--line);stroke-width:2;stroke-linejoin:round}
+  #wires path.wed{stroke:var(--red);stroke-width:2.5}
+  .gen{position:relative;display:flex;justify-content:center;gap:clamp(10px,3vw,40px);margin-bottom:46px}
+  .gen-label{position:absolute;left:0;top:-4px;font-size:11px;letter-spacing:.2em;color:var(--muted);writing-mode:vertical-rl}
+  .col{flex:1;display:flex;flex-direction:column;align-items:center;max-width:460px}
+  .kids{display:flex;justify-content:center;gap:clamp(8px,2.5vw,26px);margin-top:46px}
+
+  .node{position:relative;width:clamp(78px,19vw,132px);text-align:center;cursor:pointer;background:none;border:0;padding:0;font:inherit;color:inherit}
+  .node .pic{position:relative;aspect-ratio:3/4;border-radius:10px;overflow:hidden;background:var(--paper2);border:2px solid #c9b199;box-shadow:0 3px 10px rgba(60,20,10,.12);transition:transform .2s,border-color .2s,box-shadow .2s}
+  .node img{width:100%;height:100%;object-fit:cover;object-position:50% 18%;display:block}
+  .node:hover .pic,.node.on .pic{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 8px 20px rgba(139,30,43,.25)}
+  .node .rk{margin-top:6px;font-size:clamp(11px,2.4vw,13px);font-weight:800;color:var(--red);line-height:1.25}
+  .node .nm{font-size:clamp(10.5px,2.2vw,12.5px);color:var(--ink);line-height:1.3}
+  .node .nm span{color:var(--muted)}
+  .node.king .pic{border:3px solid var(--gold);box-shadow:0 0 0 3px rgba(201,162,74,.25),0 6px 18px rgba(139,30,43,.3)}
+  .node.king .rk{color:#7a1420}
+  .node.dim .pic{filter:grayscale(.55) sepia(.2);opacity:.85}
+  .node .tag{position:absolute;top:6px;left:6px;font-size:10px;font-weight:700;color:#fff;background:var(--red);padding:1px 6px;border-radius:4px}
+  .node .tag.gray{background:#6b5b50}
+  .node .tag.navy{background:var(--navy)}
+  .ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;background:linear-gradient(160deg,#efe2cc,#e3d0b2)}
+  .ph b{writing-mode:vertical-rl;font-size:clamp(20px,4.5vw,30px);letter-spacing:.2em;color:rgba(139,30,43,.55)}
+  .ph.empty{background:repeating-linear-gradient(45deg,#f3e9d8 0 8px,#ece0cb 8px 16px)}
+  .ph.empty b{color:rgba(43,63,115,.45)}
+
+  .harem{position:relative;margin:0 auto;max-width:900px;border:1.5px solid rgba(139,30,43,.35);border-radius:16px;padding:30px 12px 18px;background:rgba(255,250,240,.6)}
+  .harem h3{position:absolute;top:-13px;left:50%;transform:translateX(-50%);margin:0;background:var(--paper);padding:0 14px;font-size:14px;color:var(--red);letter-spacing:.15em;white-space:nowrap}
+  .harem .row{display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(8px,2vw,20px) clamp(8px,2vw,18px)}
+  .harem .node{width:clamp(84px,24vw,124px)}
+  .rank-order{text-align:center;font-size:12px;color:var(--muted);margin-top:12px}
+
+  /* ── 상세 패널 ── */
+  .modal{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(40,16,12,.55);backdrop-filter:blur(2px)}
+  .modal.show{display:flex;animation:fade .2s ease}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  .detail{position:relative;width:100%;max-width:640px;max-height:calc(100vh - 32px);overflow:auto;display:flex;gap:18px;align-items:flex-start;background:var(--paper2);border:1px solid rgba(201,162,74,.8);border-top:6px solid var(--red);border-radius:14px;padding:20px 18px 18px;box-shadow:0 16px 40px rgba(0,0,0,.35)}
+  .x{position:absolute;top:6px;right:8px;width:32px;height:32px;border:0;background:none;font-size:22px;line-height:1;color:var(--muted);cursor:pointer;font-family:inherit}
+  .x:hover{color:var(--red)}
+  .detail .dp{flex:0 0 140px;aspect-ratio:3/4;border-radius:10px;overflow:hidden;border:2px solid var(--gold)}
+  .detail .dp img{width:100%;height:100%;object-fit:cover;object-position:50% 15%}
+  .detail .dp .ph b{font-size:34px}
+  .detail h4{margin:0;font-size:20px;color:var(--red)}
+  .detail .sub{font-size:13px;color:var(--muted);margin:2px 0 8px}
+  .detail p{margin:0;font-size:14.5px}
+  .detail .rel{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px}
+  .detail .rel span{font-size:12px;border:1px solid rgba(139,30,43,.3);border-radius:999px;padding:1px 9px;color:var(--red)}
+  .hint{text-align:center;font-size:12.5px;color:var(--muted);margin-top:14px}
+
+  /* ── 궁인 ── */
+  .sec-h{text-align:center;margin:56px 0 18px}
+  .sec-h h2{margin:0;font-size:24px;color:var(--red);letter-spacing:.08em}
+  .sec-h p{margin:4px 0 0;font-size:13px;color:var(--muted)}
+  .staff{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .sc{background:var(--paper2);border:1px solid rgba(139,30,43,.2);border-radius:14px;overflow:hidden;box-shadow:0 3px 12px rgba(60,20,10,.08)}
+  .sc .sp{aspect-ratio:4/3;overflow:hidden;border-bottom:3px solid var(--gold)}
+  .sc .sp img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+  .sc .sb{padding:12px 14px 14px}
+  .sc .r{font-size:12px;color:var(--teal);font-weight:700;letter-spacing:.05em}
+  .sc .n{font-size:18px;font-weight:800;color:var(--red)}
+  .sc .n span{font-size:13px;color:var(--muted);font-weight:400}
+  .sc p{margin:6px 0 0;font-size:13.5px}
+
+  footer{text-align:center;font-size:12px;color:var(--muted);margin-top:40px}
+
+  @media (max-width:640px){
+    .gen{margin-bottom:36px}
+    .kids{margin-top:36px}
+    .gen-label{display:none}
+    .detail{flex-direction:column;align-items:center;text-align:center}
+    .detail .dp{flex-basis:auto;width:150px}
+    .detail .rel{justify-content:center}
+    .staff{grid-template-columns:1fr}
+    .sc{display:flex}
+    .sc .sp{flex:0 0 110px;aspect-ratio:3/4;border-bottom:0;border-right:3px solid var(--gold)}
+  }
+</style>
+</head>
+<body>
+<div class="band"></div>
+<div class="wrap">
+  <a class="back" href="index.html">← 소개 홈으로</a>
+  <header>
+    <div class="seal">璿源譜</div>
+    <h1>화령국 왕실 가계도<small>花嶺國 王室 家系圖</small></h1>
+    <p>인물을 누르면 소개가 펼쳐집니다.</p>
+  </header>
+
+  <div class="tree" id="tree">
+    <svg id="wires" aria-hidden="true"></svg>
+
+    <!-- 1대: 선왕 -->
+    <div class="gen">
+      <button class="node dim" id="n-seonwang" data-id="seonwang">
+        <div class="pic"><div class="ph"><b>先王</b></div><span class="tag gray">승하</span></div>
+        <div class="rk">선왕</div><div class="nm"><span>화령국 선대 왕</span></div>
+      </button>
+    </div>
+
+    <!-- 1대 왕비 + 2대 대군 -->
+    <div class="gen" style="margin-bottom:0">
+      <div class="col">
+        <button class="node dim" id="n-pyebi" data-id="pyebi">
+          <div class="pic"><img src="img/14_pyebi.webp" alt="폐비 정씨"><span class="tag gray">정비 · 사사</span></div>
+          <div class="rk">폐비 정씨</div><div class="nm">정혜인 <span>鄭惠仁</span></div>
+        </button>
+        <div class="kids">
+          <button class="node king" id="n-hongyun" data-id="hongyun">
+            <div class="pic"><img src="img/01_hongyun.webp" alt="금상 홍윤"><span class="tag">금상</span></div>
+            <div class="rk">금상</div><div class="nm">홍윤 <span>洪昀</span></div>
+          </button>
+          <button class="node" id="n-hongseo" data-id="hongseo">
+            <div class="pic"><img src="img/02_hongseo.webp" alt="청하대군 홍서"></div>
+            <div class="rk">청하대군</div><div class="nm">홍서 <span>洪曙</span></div>
+          </button>
+        </div>
+      </div>
+      <div class="col">
+        <button class="node" id="n-daebi" data-id="daebi">
+          <div class="pic"><img src="img/05_daebi.webp" alt="대비 윤씨"><span class="tag navy">계비</span></div>
+          <div class="rk">대비 윤씨</div><div class="nm">윤소혜 <span>尹昭惠</span></div>
+        </button>
+        <div class="kids">
+          <button class="node" id="n-honggang" data-id="honggang">
+            <div class="pic"><img src="img/03_honggang.webp" alt="익양대군 홍강"></div>
+            <div class="rk">익양대군</div><div class="nm">홍강 <span>洪剛</span></div>
+          </button>
+          <button class="node" id="n-hongyul" data-id="hongyul">
+            <div class="pic"><img src="img/04_hongyul.webp" alt="영안대군 홍율"></div>
+            <div class="rk">영안대군</div><div class="nm">홍율 <span>洪律</span></div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3대: 금상의 내명부 -->
+    <div style="height:56px"></div>
+    <div class="harem" id="n-harem">
+      <h3>금상의 내명부</h3>
+      <div class="row">
+        <button class="node" data-id="jungjeon">
+          <div class="pic"><div class="ph empty"><b>空席</b></div></div>
+          <div class="rk">중전</div><div class="nm"><span>공석</span></div>
+        </button>
+        <button class="node" data-id="gwiin">
+          <div class="pic"><img src="img/06_gwiin.webp" alt="귀인 윤씨"><span class="tag">종1품</span></div>
+          <div class="rk">귀인 윤씨</div><div class="nm"><span>연화당</span></div>
+        </button>
+        <button class="node" data-id="sugui">
+          <div class="pic"><img src="img/07_sugui.webp" alt="숙의 민씨"><span class="tag">종2품</span></div>
+          <div class="rk">숙의 민씨</div><div class="nm"><span>취운당</span></div>
+        </button>
+        <button class="node" data-id="soyong">
+          <div class="pic"><img src="img/08_soyong.webp" alt="소용 백씨"><span class="tag">정3품</span></div>
+          <div class="rk">소용 백씨</div><div class="nm"><span>청풍당</span></div>
+        </button>
+        <button class="node" data-id="sugyong">
+          <div class="pic"><img src="img/09_sugyong.webp" alt="숙용 조씨"><span class="tag">종3품</span></div>
+          <div class="rk">숙용 조씨</div><div class="nm"><span>매화당</span></div>
+        </button>
+        <button class="node" data-id="sugwon">
+          <div class="pic"><img src="img/10_sugwon.webp" alt="숙원 서씨"><span class="tag">종4품</span></div>
+          <div class="rk">숙원 서씨</div><div class="nm"><span>소요당</span></div>
+        </button>
+      </div>
+      <div class="rank-order">후궁전 서열 · 귀인 &gt; 숙의 &gt; 소용 &gt; 숙용 &gt; 숙원</div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal" role="dialog" aria-modal="true">
+    <div class="detail" id="detail">
+      <button class="x" id="x" aria-label="닫기">×</button>
+      <div class="dp" id="d-pic"></div>
+      <div>
+        <h4 id="d-name"></h4>
+        <div class="sub" id="d-sub"></div>
+        <p id="d-text"></p>
+        <div class="rel" id="d-rel"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 궁인 -->
+  <div class="sec-h">
+    <h2>궁 안의 사람들</h2>
+    <p>왕가의 피는 아니지만, 궁은 이들 없이 돌아가지 않는다.</p>
+  </div>
+  <div class="staff">
+    <div class="sc">
+      <div class="sp"><img src="img/11_jejo.webp" alt="제조상궁 한씨"></div>
+      <div class="sb">
+        <div class="r">제조상궁 · 궁녀 총괄</div>
+        <div class="n">한정심 <span>韓貞心</span></div>
+        <p>대비전의 사람. 규율과 전례를 신앙처럼 지킨다. 소동 한가운데서 혼자 무표정하게 법도를 읊는다. 일 잘하는 사람만은 인정한다.</p>
+      </div>
+    </div>
+    <div class="sc">
+      <div class="sp"><img src="img/12_sangseon.webp" alt="김 상선"></div>
+      <div class="sb">
+        <div class="r">상선 · 내관 우두머리</div>
+        <div class="n">김덕보 <span>金德寶</span></div>
+        <p>금상을 어릴 적부터 모셔 온 능청스러운 내관. 전하의 마음을 제일 먼저 알고, 모르는 척 판을 깐다. 헛기침 한 번에 뜻이 다 담겨 있다.</p>
+      </div>
+    </div>
+    <div class="sc">
+      <div class="sp"><img src="img/13_jeomsun.webp" alt="점순"></div>
+      <div class="sb">
+        <div class="r">세답방 무수리 · 첫 친구</div>
+        <div class="n">점순</div>
+        <p>숨 안 쉬고 떠드는 궁 안 소식통. 악의는 없고 그저 신이 날 뿐인데, 들은 말은 늘 한 단계 키워서 옮긴다.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>왜 나만 무수리야?! · 花嶺國</footer>
+</div>
+<div class="band"></div>
+
+<script>
+const P = {
+  seonwang:{name:"선왕",sub:"先王 · 칠 년 전 승하",img:"",ph:"先王",
+    text:"화령국의 선대 왕. 정비 정씨에게서 금상과 청하대군을, 계비 윤씨에게서 익양대군과 영안대군을 얻었다. 그가 남긴 두 갈래의 피가 지금 궁을 둘로 나누고 있다.",
+    rel:["정비 · 폐비 정씨","계비 · 대비 윤씨"]},
+  pyebi:{name:"폐비 정씨 · 정혜인",sub:"鄭惠仁 · 선왕의 정비 · 사사",img:"14_pyebi",
+    text:"선왕의 정비였으나 십오 년 전 모함을 받아 폐위되고 사약을 받았다. 금상과 청하대군의 생모. 궁에서는 누구도 그 이름을 입에 올리지 않는다.",
+    rel:["아들 · 금상 홍윤","아들 · 청하대군 홍서"]},
+  daebi:{name:"대비 윤씨 · 윤소혜",sub:"尹昭惠 · 마흔일곱 · 계비 · 내명부의 웃어른",img:"05_daebi",
+    text:"본래 선왕의 후궁이었다가 폐비가 사사된 뒤 계비가 되었다. 중궁전이 빈 지금 내명부의 실권을 쥐고 있다. 웃는 얼굴로 손수 차를 내리며, 질문 하나로 사람을 무너뜨린다. 친아들 앞에서만 어머니의 얼굴이 된다.",
+    rel:["아들 · 익양대군 홍강","아들 · 영안대군 홍율","질녀 · 귀인 윤씨"]},
+  hongyun:{name:"금상 홍윤",sub:"洪昀 · 스물다섯 · 즉위 칠 년",img:"01_hongyun",
+    text:"조정이 숨죽이는 폭군. 웃지 않고, 용서하지 않고, 누구도 곁에 두지 않는다. 사랑을 말할 줄 몰라 어명으로 챙기고, 단 한 사람에게만 목소리가 낮아진다.",
+    rel:["생모 · 폐비 정씨","동복 아우 · 청하대군","계모 · 대비 윤씨"]},
+  hongseo:{name:"청하대군 홍서",sub:"淸河大君 · 洪曙 · 스물셋 · 금상의 동복 아우",img:"02_hongseo",
+    text:"약초 냄새가 나는 다정한 의원 나리. 의술을 익혀 내의원에 드나들며 몰래 궁인과 백성을 돌본다. 평생 형에게 모든 것을 양보해 온 사람.",
+    rel:["형 · 금상 홍윤","생모 · 폐비 정씨"]},
+  honggang:{name:"익양대군 홍강",sub:"益陽大君 · 洪剛 · 스물넷 · 대비의 맏아들",img:"03_honggang",
+    text:"형제 중 가장 크고 목소리도 가장 크다. 활터에서 목숨 걸고 형님에게 도전하는 거구. 정정당당함이 신조인데, 진지함이 지나쳐서 웃기다.",
+    rel:["어머니 · 대비 윤씨","아우 · 영안대군 홍율"]},
+  hongyul:{name:"영안대군 홍율",sub:"永安大君 · 洪律 · 스물둘 · 대비의 둘째 아들",img:"04_hongyul",
+    text:"궁에서 이름난 망나니. 갓은 늘 비뚤고 옷고름은 대충 맨다. 그런데 요즘 말버릇이 어디서 많이 들어 본 것 같다.",
+    rel:["어머니 · 대비 윤씨","형 · 익양대군 홍강"]},
+  jungjeon:{name:"중전",sub:"中殿 · 공석",img:"",ph:"空席",empty:true,
+    text:"중궁전은 이 년째 비어 있다. 그 자리를 두고 대비전과 후궁전, 조정의 셈이 모두 엇갈린다.",
+    rel:["내명부의 수장 자리"]},
+  gwiin:{name:"귀인 윤씨",sub:"종1품 · 연화당 · 스물넷",img:"06_gwiin",
+    text:"후궁 서열 첫째. 예법이 완벽하고 말씨가 부드럽지만, 칭찬의 형식에 독을 담는다. 가문이 바라는 것은 단 하나, 중궁전.",
+    rel:["고모 · 대비 윤씨","운산 윤씨 가문"]},
+  sugui:{name:"숙의 민씨",sub:"종2품 · 취운당 · 스물하나",img:"07_sugui",
+    text:"오만하게 쏘아붙이지만 속은 여리고 외롭다. 입궁 이 년, 금상의 발걸음은 한 번도 없었다. 고마움을 인정하지 않는 방식으로 고마워한다.",
+    rel:["대비가 들인 후궁","청계 민씨 가문"]},
+  soyong:{name:"소용 백씨",sub:"정3품 · 청풍당 · 스물둘",img:"08_soyong",
+    text:"금위대장의 딸. 당의보다 활이 편한 무가 규수. 후궁전 정치에도 금상에게도 관심 없다는 걸 숨기지 않고, 몰래 후원에서 활을 쏜다.",
+    rel:["아버지 · 금위대장","북령 백씨 가문"]},
+  sugyong:{name:"숙용 조씨",sub:"종3품 · 매화당 · 스물여섯",img:"09_sugyong",
+    text:"금상 생모의 외가 쪽 먼 친척. 몰락한 가문을 지키려 금상이 이름만 후궁으로 들였다. 조용하고 다정하며, 궁에서는 그녀를 '숨은 총애'라 오해한다.",
+    rel:["금상의 먼 외척","매곡 조씨 가문"]},
+  sugwon:{name:"숙원 서씨",sub:"종4품 · 소요당 · 스물",img:"10_sugwon",
+    text:"역관 집안 출신의 막내 후궁. 늘 웃는 눈으로 소문과 물건을 사고판다. 웃음이 커질수록 계산 중이다. 그래도 진심으로 지켜 준 사람은 배신하지 못한다.",
+    rel:["남포 서씨 가문"]}
+};
+
+const modal = document.getElementById('modal');
+function hide(){ modal.classList.remove('show'); document.querySelectorAll('.node.on').forEach(n=>n.classList.remove('on')); }
+document.getElementById('x').addEventListener('click', hide);
+modal.addEventListener('click', e=>{ if(e.target===modal) hide(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') hide(); });
+function show(id, btn){
+  const d = P[id]; if(!d) return;
+  document.querySelectorAll('.node.on').forEach(n=>n.classList.remove('on'));
+  btn.classList.add('on');
+  const pic = document.getElementById('d-pic');
+  pic.innerHTML = d.img ? '<img src="img/'+d.img+'.webp" alt="">' : '<div class="ph'+(d.empty?' empty':'')+'"><b>'+d.ph+'</b></div>';
+  document.getElementById('d-name').textContent = d.name;
+  document.getElementById('d-sub').textContent = d.sub;
+  document.getElementById('d-text').textContent = d.text;
+  document.getElementById('d-rel').innerHTML = (d.rel||[]).map(r=>'<span>'+r+'</span>').join('');
+  modal.classList.add('show');
+}
+document.querySelectorAll('.node').forEach(b=>b.addEventListener('click',()=>show(b.dataset.id,b)));
+
+/* 연결선 그리기 */
+const svg = document.getElementById('wires');
+const tree = document.getElementById('tree');
+function box(id){
+  const el = document.getElementById(id), t = tree.getBoundingClientRect(), r = el.getBoundingClientRect();
+  const pic = el.querySelector('.pic') || el;
+  const p = pic.getBoundingClientRect();
+  return {cx:r.left - t.left + r.width/2, top:r.top - t.top, bottom:r.bottom - t.top, picBottom:p.bottom - t.top};
+}
+function elbow(a, b, midY, cls){
+  return '<path class="'+(cls||'')+'" d="M'+a.cx+','+a.bottom+' V'+midY+' H'+b.cx+' V'+b.top+'"/>';
+}
+function draw(){
+  let h = '';
+  const sw = box('n-seonwang'), pb = box('n-pyebi'), db = box('n-daebi');
+  const m1 = sw.bottom + (pb.top - sw.bottom)/2;
+  h += elbow(sw, pb, m1, 'wed') + elbow(sw, db, m1, 'wed');
+  const yun = box('n-hongyun'), seo = box('n-hongseo'), gang = box('n-honggang'), yul = box('n-hongyul');
+  const m2 = pb.bottom + (yun.top - pb.bottom)/2;
+  h += elbow(pb, yun, m2) + elbow(pb, seo, m2);
+  h += elbow(db, gang, m2) + elbow(db, yul, m2);
+  const hr = box('n-harem');
+  const m3 = yun.bottom + (hr.top - yun.bottom)/2;
+  h += elbow(yun, {cx:hr.cx, top:hr.top}, m3, 'wed');
+  svg.innerHTML = h;
+}
+window.addEventListener('load', draw);
+window.addEventListener('resize', draw);
+document.fonts && document.fonts.ready.then(draw);
+draw();
+</script>
+</body>
+</html>
