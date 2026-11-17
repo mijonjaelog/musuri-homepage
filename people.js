@@ -1,6 +1,6 @@
 /* 왜 나만 무수리야?! · 인물 데이터 (index.html, gagye.html 공용) */
 window.PEOPLE = {
-  seonwang:{name:"선왕",sub:"先王 · 칠 년 전 승하",img:"",ph:"先王",
+  seonwang:{name:"선왕",sub:"先王 · 칠 년 전 승하",img:"00_seonwang",
     text:"화령국의 선대 왕. 정비 정씨에게서 금상과 청하대군을, 계비 윤씨에게서 익양대군과 영안대군을 얻었다. 그가 남긴 두 갈래의 피가 지금 궁을 둘로 나누고 있다.",
     rel:["정비 · 폐비 정씨","계비 · 대비 윤씨"]},
   pyebi:{name:"폐비 정씨 · 정혜인",sub:"鄭惠仁 · 선왕의 정비 · 사사",img:"14_pyebi",
