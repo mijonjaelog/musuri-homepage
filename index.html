@@ -150,6 +150,42 @@
   .btn.line{color:var(--red);background:rgba(255,255,255,.5)}
   .btn.line:hover{background:var(--red);color:#fff}
 
+  /* 화령국 */
+  .nation{display:grid;grid-template-columns:minmax(0,340px) 1fr;gap:36px;align-items:center;max-width:980px;margin:0 auto}
+  .crest{position:relative;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;
+    background:radial-gradient(circle,#fff9ef 0%,#f6e8d0 62%,#ead6b4 63%,#f6e8d0 66%,#e3cba2 100%);box-shadow:0 18px 40px rgba(60,20,10,.15),inset 0 0 0 10px rgba(201,162,74,.25)}
+  .crest::before{content:"";position:absolute;inset:7%;border-radius:50%;border:2px dashed rgba(139,30,43,.25);animation:spin 60s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .plum{position:relative;width:42%;aspect-ratio:1;margin-bottom:16%;animation:breathe 5s ease-in-out infinite}
+  @keyframes breathe{50%{transform:scale(1.04) rotate(4deg)}}
+  .plum i{position:absolute;left:50%;top:50%;width:46%;height:46%;margin:-23% 0 0 -23%;border-radius:50%;
+    background:radial-gradient(circle at 50% 70%,#f6a9b6 0%,#e05a72 55%,#b3203c 100%);transform:rotate(var(--r)) translateY(-52%);box-shadow:inset 0 -4px 10px rgba(120,10,30,.25)}
+  .plum b{position:absolute;left:50%;top:50%;width:30%;height:30%;margin:-15% 0 0 -15%;border-radius:50%;background:radial-gradient(circle,#ffe8a6 0 25%,#d99a2b 26% 32%,#ffe8a6 33% 45%,transparent 46%),radial-gradient(circle,#c43a52,#9a1a32);z-index:2}
+  .crest .nm{position:absolute;bottom:11%;left:0;right:0;text-align:center;font-weight:800;color:var(--red);font-size:clamp(20px,3vw,28px);letter-spacing:.25em}
+  .crest .nm small{display:block;font-size:11px;letter-spacing:.4em;color:var(--muted);font-weight:400}
+  .facts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .fact{padding:12px 16px;background:var(--paper2);border-radius:10px;border-left:3px solid var(--gold)}
+  .fact .t{font-size:12px;color:var(--teal);font-weight:700;letter-spacing:.1em}
+  .fact .v{font-size:17px;font-weight:800;color:var(--ink);line-height:1.4}
+  .fact .v span{font-size:13px;font-weight:400;color:var(--muted)}
+  .motto{grid-column:1/-1;position:relative;padding:18px 20px 16px 52px;background:linear-gradient(135deg,#3a1520,#5a1e2a);color:#fbecd6;border-radius:10px;font-size:clamp(15px,2vw,18px);font-weight:700;line-height:1.6}
+  .motto::before{content:"“";position:absolute;left:16px;top:2px;font-size:54px;color:var(--gold2);line-height:1}
+  .motto small{display:block;margin-top:4px;font-size:12px;font-weight:400;color:#d8bf9e;letter-spacing:.1em}
+  .timeline{max-width:860px;margin:44px auto 0;position:relative;padding-left:28px}
+  .timeline::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:linear-gradient(var(--gold),var(--red))}
+  .tl-i{position:relative;margin-bottom:18px}
+  .tl-i::before{content:"";position:absolute;left:-26px;top:7px;width:14px;height:14px;border-radius:50%;background:var(--paper);border:3px solid var(--gold)}
+  .tl-i.now::before{background:var(--red);border-color:var(--red);box-shadow:0 0 0 5px rgba(139,30,43,.18)}
+  .tl-i .w{font-size:12.5px;font-weight:800;color:var(--teal);letter-spacing:.1em}
+  .tl-i .d{font-size:15.5px}
+  .tl-i .d b{color:var(--red)}
+  .heir{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;max-width:720px;margin:26px auto 0;text-align:center}
+  .heir .s{padding:14px;border-radius:12px;background:var(--paper2);border:1px solid rgba(139,30,43,.18)}
+  .heir .s .t{font-size:12px;color:var(--muted)}
+  .heir .s .n{font-size:18px;font-weight:800;color:var(--red)}
+  .heir .vs{font-weight:800;color:var(--gold);font-size:18px}
+  .heir-t{text-align:center;margin-top:30px;font-size:13px;letter-spacing:.3em;color:var(--muted)}
+
   /* 궁궐 안내 */
   .map-tabs{display:flex;justify-content:center;gap:6px;margin-bottom:14px}
   .map-tabs button{padding:7px 20px;border-radius:999px;border:1px solid var(--teal);background:none;color:var(--teal);font-size:14px;cursor:pointer}
@@ -262,6 +298,10 @@
 
   @media (max-width:900px){ .cast{grid-template-columns:repeat(5,1fr)} }
   @media (max-width:760px){
+    .nation{grid-template-columns:1fr;gap:24px}
+    .crest{max-width:260px;width:100%;margin:0 auto}
+    .facts{grid-template-columns:1fr 1fr}
+    .heir{grid-template-columns:1fr;gap:6px}
     .hero{grid-template-columns:1fr;gap:22px;text-align:center;padding-top:30px}
     .hero .art img{max-width:340px;margin:0 auto}
     .tags,.cta{justify-content:center}
@@ -325,6 +365,7 @@
   <div class="in">
     <a class="logo" href="#about">왜 나만 무수리야?!</a>
     <a class="nl" href="#about">작품 소개</a>
+    <a class="nl" href="#nation">화령국</a>
     <a class="nl" href="#palace">궁궐 안내</a>
     <a class="nl" href="#scene">첫 장면</a>
     <a class="nl" href="#cast">인물</a>
@@ -356,6 +397,40 @@
 </div>
 
 <main>
+  <!-- 화령국 -->
+  <section id="nation">
+    <div class="h rv"><div class="k">國號</div><h2>홍매의 나라, 화령국</h2><p>혹한 끝에 가장 먼저 피는 붉은 매화를 왕실의 상징으로 삼은 나라.</p><span class="orn"></span></div>
+    <div class="nation">
+      <div class="crest rv">
+        <div class="plum"><i style="--r:0deg"></i><i style="--r:72deg"></i><i style="--r:144deg"></i><i style="--r:216deg"></i><i style="--r:288deg"></i><b></b></div>
+        <div class="nm">花嶺國<small>HWARYEONG</small></div>
+      </div>
+      <div class="facts rv">
+        <div class="fact"><div class="t">국호</div><div class="v">화령국 <span>花嶺國</span></div></div>
+        <div class="fact"><div class="t">왕실 성씨</div><div class="v">홍 <span>洪</span></div></div>
+        <div class="fact"><div class="t">국화 · 왕실 상징</div><div class="v">홍매 <span>紅梅</span></div></div>
+        <div class="fact"><div class="t">정궁</div><div class="v">홍매궁 <span>紅梅宮</span></div></div>
+        <div class="fact"><div class="t">시대</div><div class="v">조선 중기풍 <span>절기로 흐르는 시간</span></div></div>
+        <div class="fact"><div class="t">지금</div><div class="v">화령 칠년 정월 <span>대한 무렵</span></div></div>
+        <div class="motto">혹한을 견딘 홍매만이 가장 먼저 봄을 맞이한다.<small>王室 家訓 · 왕실 가훈</small></div>
+      </div>
+    </div>
+
+    <div class="timeline rv">
+      <div class="tl-i"><div class="w">십오 년 전</div><div class="d">선왕의 정비 정씨가 모함을 받아 <b>사약</b>을 받는다. 남겨진 두 아들이 지금의 금상과 청하대군.</div></div>
+      <div class="tl-i"><div class="w">칠 년 전</div><div class="d">금상 즉위. 외척 윤씨 일파를 숙청하고 상소를 불태워 조정은 그를 <b>폭군</b>이라 부르기 시작한다.</div></div>
+      <div class="tl-i"><div class="w">이 년 전</div><div class="d">중전이 역모에 연루되어 폐서인된다. 그 뒤로 <b>중궁전은 빈 채</b>로 남았다.</div></div>
+      <div class="tl-i now"><div class="w">지금</div><div class="d">조정은 국혼과 간택을 재촉하고, 후궁 다섯은 저마다의 가문을 업고 있다. 금상은 즉위 이래 누구의 처소에도 들지 않았다. 그리고 세답방에, <b>무수리 하나</b>가 눈을 뜬다.</div></div>
+    </div>
+
+    <div class="heir-t rv">後嗣 · 금상에게 후사가 없다</div>
+    <div class="heir rv">
+      <div class="s"><div class="t">적장 계통</div><div class="n">청하대군</div></div>
+      <div class="vs">對</div>
+      <div class="s"><div class="t">대비전의 바람</div><div class="n">익양대군</div></div>
+    </div>
+  </section>
+
   <!-- 궁궐 안내 -->
   <section id="palace">
     <div class="h rv"><div class="k">宮闕 案內</div><h2>궁궐 안내</h2><p>전각을 누르면 그곳이 어떤 곳인지 볼 수 있다. 붉게 빛나는 세답방이 이야기가 시작되는 자리다.</p><span class="orn"></span></div>
@@ -696,7 +771,7 @@ if ('IntersectionObserver' in window){
   document.querySelectorAll('.rv').forEach(el => io.observe(el));
   const links = [...document.querySelectorAll('nav a.nl[href^="#"]')];
   const so = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ links.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + e.target.id)); } }), {rootMargin:'-45% 0px -50% 0px'});
-  ['about','palace','scene','cast','jinbong','life','cmd'].forEach(id => { const el = document.getElementById(id); if (el) so.observe(el); });
+  ['about','nation','palace','scene','cast','jinbong','life','cmd'].forEach(id => { const el = document.getElementById(id); if (el) so.observe(el); });
 } else { document.querySelectorAll('.rv').forEach(el => el.classList.add('in')); }
 </script>
 </body>
