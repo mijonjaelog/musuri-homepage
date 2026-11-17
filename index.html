@@ -174,17 +174,11 @@
   .timeline{max-width:860px;margin:44px auto 0;position:relative;padding-left:28px}
   .timeline::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:linear-gradient(var(--gold),var(--red))}
   .tl-i{position:relative;margin-bottom:18px}
-  .tl-i::before{content:"";position:absolute;left:-26px;top:7px;width:14px;height:14px;border-radius:50%;background:var(--paper);border:3px solid var(--gold)}
+  .tl-i::before{content:"";position:absolute;left:-19px;top:7px;transform:translateX(-50%);box-sizing:border-box;width:14px;height:14px;border-radius:50%;background:var(--paper);border:3px solid var(--gold)}
   .tl-i.now::before{background:var(--red);border-color:var(--red);box-shadow:0 0 0 5px rgba(139,30,43,.18)}
   .tl-i .w{font-size:12.5px;font-weight:800;color:var(--teal);letter-spacing:.1em}
   .tl-i .d{font-size:15.5px}
   .tl-i .d b{color:var(--red)}
-  .heir{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;max-width:720px;margin:26px auto 0;text-align:center}
-  .heir .s{padding:14px;border-radius:12px;background:var(--paper2);border:1px solid rgba(139,30,43,.18)}
-  .heir .s .t{font-size:12px;color:var(--muted)}
-  .heir .s .n{font-size:18px;font-weight:800;color:var(--red)}
-  .heir .vs{font-weight:800;color:var(--gold);font-size:18px}
-  .heir-t{text-align:center;margin-top:30px;font-size:13px;letter-spacing:.3em;color:var(--muted)}
 
   /* 궁궐 안내 */
   .map-tabs{display:flex;justify-content:center;gap:6px;margin-bottom:14px}
@@ -301,7 +295,6 @@
     .nation{grid-template-columns:1fr;gap:24px}
     .crest{max-width:260px;width:100%;margin:0 auto}
     .facts{grid-template-columns:1fr 1fr}
-    .heir{grid-template-columns:1fr;gap:6px}
     .hero{grid-template-columns:1fr;gap:22px;text-align:center;padding-top:30px}
     .hero .art img{max-width:340px;margin:0 auto}
     .tags,.cta{justify-content:center}
@@ -420,15 +413,9 @@
       <div class="tl-i"><div class="w">십오 년 전</div><div class="d">선왕의 정비 정씨가 모함을 받아 <b>사약</b>을 받는다. 남겨진 두 아들이 지금의 금상과 청하대군.</div></div>
       <div class="tl-i"><div class="w">칠 년 전</div><div class="d">금상 즉위. 외척 윤씨 일파를 숙청하고 상소를 불태워 조정은 그를 <b>폭군</b>이라 부르기 시작한다.</div></div>
       <div class="tl-i"><div class="w">이 년 전</div><div class="d">중전이 역모에 연루되어 폐서인된다. 그 뒤로 <b>중궁전은 빈 채</b>로 남았다.</div></div>
-      <div class="tl-i now"><div class="w">지금</div><div class="d">중궁전은 비었고 후사는 없다. 간택을 청하는 상소만 편전에 쌓여 간다. 정월 대한, 홍매가 막 터지던 날 세답방 빨랫줄에서 <b>젖은 홑청 한 장</b>이 바람에 날아올랐다.</div></div>
+      <div class="tl-i now"><div class="w">지금</div><div class="d">정월 대한, 홍매가 막 터지던 날. 세답방 빨랫줄에서 <b>젖은 홑청 한 장</b>이 바람에 날아올랐다.</div></div>
     </div>
 
-    <div class="heir-t rv">後嗣 · 금상에게 후사가 없다</div>
-    <div class="heir rv">
-      <div class="s"><div class="t">적장 계통</div><div class="n">청하대군</div></div>
-      <div class="vs">對</div>
-      <div class="s"><div class="t">대비전의 바람</div><div class="n">익양대군</div></div>
-    </div>
   </section>
 
   <!-- 궁궐 안내 -->
